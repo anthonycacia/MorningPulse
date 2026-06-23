@@ -1,4 +1,4 @@
-from app.core.config import PAIR_NAMES
+from app.core.config import forex_pairs, PAIR_NAMES, FOREX_SHORT_MOVING_AVG, FOREX_LONG_MOVING_AVG
 from app.services.greetings import morning_greeting
 from app.services.metrics import (
     latest,
@@ -14,17 +14,13 @@ load_dotenv()
 
 def build_morning_message(
     fx_series: dict,
-    short_window: int = int(os.getenv("FOREX_SHORT_MOVING_AVG")),
-    long_window: int = int(os.getenv("FOREX_LONG_MOVING_AVG")),
+    short_window: int = int(FOREX_SHORT_MOVING_AVG),
+    long_window: int = int(FOREX_LONG_MOVING_AVG),
 ):
     message = morning_greeting()
     message += "\n\n-- MorningPulse FX Report --\n"
 
-    pairs = [
-        p.strip()
-        for p in os.getenv("FOREX_PAIRS", "").split(",")
-        if p.strip()
-    ]
+    pairs = forex_pairs()
     
     for pair in pairs:
         series = fx_series.get(pair)

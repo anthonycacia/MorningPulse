@@ -7,12 +7,12 @@ from app.services.market_transform import to_series
 from app.services.morning_pulse import generate_fx_message
 from dotenv import load_dotenv
 from fastapi import FastAPI
+from app.core.config import forex_pairs, FOREX_API_KEY, DISCORD_WEBHOOK_URL
 
 
 load_dotenv()
 app = FastAPI(title="MorningPulse", version="0.1.0")
 
-from app.core.config import forex_pairs
 symbols = forex_pairs()
 
 
@@ -20,12 +20,18 @@ symbols = forex_pairs()
 # Dependency wiring
 # -------------------------
 
+if not FOREX_API_KEY:
+    raise RuntimeError("FOREX_API_KEY not set")
+
 fx_provider = FXProvider(
-    api_key=os.getenv("FOREX_API_KEY", "")
+    api_key=FOREX_API_KEY
 )
 
+if not DISCORD_WEBHOOK_URL:
+    raise RuntimeError("DISCORD_WEBHOOK_URL not set")
+
 discord_notifier = DiscordNotifier(
-    webhook_url=os.getenv("DISCORD_WEBHOOK_URL", "")
+    webhook_url=DISCORD_WEBHOOK_URL
 )
 
 
@@ -36,8 +42,8 @@ discord_notifier = DiscordNotifier(
 @app.get("/health")
 async def health():
     checks = {
-        "forex_api_configured": bool(os.getenv("FOREX_API_KEY")),
-        "discord_configured": bool(os.getenv("DISCORD_WEBHOOK_URL")),
+        "forex_api_configured": bool(FOREX_API_KEY),
+        "discord_configured": bool(DISCORD_WEBHOOK_URL),
     }
 
     return {

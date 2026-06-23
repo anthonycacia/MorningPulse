@@ -1,6 +1,7 @@
 import os
 import random
 from dotenv import load_dotenv
+from app.core.config import MY_NAME
 
 load_dotenv()
 
@@ -67,7 +68,6 @@ GREETINGS = [
 
 
 def morning_greeting():
-    name = os.getenv("MY_NAME","World")
     greeting = random.choice(GREETINGS)
 
     # pick one fact randomly if we decide to include it
@@ -75,6 +75,6 @@ def morning_greeting():
 
     # 1 in 5 chance of including the fact
     if random.randint(1, 6) == 1:
-        return f"{greeting['text']} {name}!\n — {fact}"
+        return f"{greeting['text']} {MY_NAME}!\n — {fact}"
 
-    return f"{greeting["text"]} {name}!"
+    return f"{greeting["text"]} {MY_NAME}!"

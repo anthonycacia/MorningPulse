@@ -3,6 +3,13 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+DISCORD_WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL","https://1337")
+FOREX_API_KEY = os.getenv("FOREX_API_KEY",123)
+
+FOREX_SHORT_MOVING_AVG = int(os.getenv("FOREX_SHORT_MOVING_AVG", "42"))
+FOREX_LONG_MOVING_AVG = int(os.getenv("FOREX_LONG_MOVING_AVG", "150"))
+
+MY_NAME = os.getenv("MY_NAME", "World")
 
 PAIR_NAMES = {
     "EURUSD": "Euro",

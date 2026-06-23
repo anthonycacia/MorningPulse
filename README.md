@@ -1,6 +1,6 @@
 # MorningPulse
 
-MorningPulse is a lightweight, containerized FastAPI service that delivers automated morning market briefings directly to Discord using webhooks; no Developer account or Discord App necessary.
+MorningPulse is a lightweight, containerized FastAPI service that delivers automated, morning market briefings directly to Discord using webhooks; no Developer account or "Discord App" is necessary.
 
 Each morning, MorningPulse gathers foreign exchange market data, calculates daily changes and moving averages, formats a human-readable report, then delivers it to a Discord channel.  
 
@@ -63,10 +63,10 @@ Each report includes:
 - Long-term moving average  
 
 # Requirements
-Docker  
-Docker Compose  
-FXMarketAPI account and API key  
-Discord webhook URL  
+- Docker  
+- Docker Compose  
+- FXMarketAPI account and API key  
+- Discord webhook URL  
 
 # Quick Start
 
@@ -85,10 +85,10 @@ cp .env.example .env
 
 Edit .env:  
 
-DISCORD_WEBHOOK=your_webhook_url  
-FOREX_API_KEY=your_api_key  
-FOREX_PAIRS=EURUSD,GBPUSD,CADUSD,AUDUSD,NZDUSD,USDJPY
-MY_NAME=World # Insert your name
+- DISCORD_WEBHOOK=your_webhook_url  
+- FOREX_API_KEY=your_api_key  
+- FOREX_PAIRS=EURUSD,GBPUSD,CADUSD,AUDUSD,NZDUSD,USDJPY
+- MY_NAME=World # Insert your name
 
 Build and start the service:  
 
@@ -122,13 +122,14 @@ Market data is cached using a Docker volume:
 The cache survives container rebuilds and restarts.
 
 # Roadmap
-News Headlines and Summaries  
-Book Quotes/Poetry/Riddle  
-Stock Scanner  
-Discord Embeds  
-Expanded CI/CD  
-Raspberry Pi Deployment Guide  
-Cron Service  
+- News Headlines and Summaries  
+- Book Quotes/Poetry/Riddle  
+- Stock Scanner  
+- Discord Embeds  
+- Expanded CI/CD  
+- Raspberry Pi Deployment Guide  
+- Cron Service  
+- Weighted 'good morning' messages and facts
 
 ## Example Discord Webhook Integration
 
