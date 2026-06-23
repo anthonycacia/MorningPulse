@@ -1,3 +1,7 @@
 fastapi
+httpx
+pandas
+pydantic
 python-dotenv
+pytest-asyncio
 uvicorn
