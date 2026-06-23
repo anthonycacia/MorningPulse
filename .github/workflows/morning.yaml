@@ -1,0 +1,16 @@
+name: MorningPulse Scheduler
+
+on:
+  schedule:
+    - cron: "0 10 * * *"  # 10:00 UTC
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Trigger MorningPulse
+        run: |
+          curl -X POST ${{ secrets.MORNING_PULSE_URL }}
