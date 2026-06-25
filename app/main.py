@@ -39,19 +39,26 @@ discord_notifier = DiscordNotifier(
 # Health check
 # -------------------------
 
-@app.get("/health")
-async def health():
+@app.get("/health/live")
+async def health_live():
+    return {
+        "status": "alive"
+    }
+    
+
+@app.get("/health/ready")
+async def health_ready():
     checks = {
         "forex_api_configured": bool(FOREX_API_KEY),
         "discord_configured": bool(DISCORD_WEBHOOK_URL),
     }
 
     return {
-        "status": "ok" if all(checks.values()) else "degraded",
+        "status": "ready" if all(checks.values()) else "not_ready",
         "checks": checks,
-    }
+    }    
     
-
+    
 @app.get("/msg")
 async def msg():
 

@@ -155,9 +155,15 @@ run: curl --fail -X POST https://your-domain.com/run/morning-pulse
 ```
 
 # API Endpoints
-### GET /health
+### GET /health/live
 
-Returns service health information.
+Returns app process is running and container is up.
+
+### GET /health/ready
+
+App is running and usable.  
+Required configs are present.  
+Safe to perform actions.  
 
 ### GET /debug/fx
 
