@@ -2,7 +2,8 @@ name: MorningPulse Scheduler
 
 on:
   schedule:
-    - cron: "0 10 * * *"  # 10:00 UTC
+    - cron: "0 10 * * *"
+  workflow_dispatch:
 
 jobs:
   run:
@@ -11,6 +12,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Start service
+        run: docker compose up -d --build
+
+      - name: Wait for startup
+        run: sleep 10
+
       - name: Trigger MorningPulse
-        run: |
-          curl -X POST ${{ secrets.MORNING_PULSE_URL }}
+        run: curl --fail -X POST http://localhost:8000/run/morning-pulse
+
+      - name: Shutdown
+        run: docker compose down
