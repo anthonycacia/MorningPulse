@@ -12,6 +12,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Create .env
+        run: |
+          cat > .env <<EOF
+          FOREX_API_KEY=${{secrets.FOREX_API_KEY}}
+          DISCORD_WEBHOOK_URL=${{secrets.DISCORD_WEBHOOK_URL}}
+          MY_NAME=${{secrets.MY_NAME}}
+          EOF
+          
       - name: Start service
         run: docker compose up -d --build
 
