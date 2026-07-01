@@ -13,16 +13,15 @@ class FXProvider:
         self.api_key = api_key
 
 
+    @staticmethod
+    def _adjust_to_weekday(d: date) -> date:
+        while d.weekday() >= 5:
+            d -= timedelta(days=1)
+        return d
+
+
     def get_last_trading_day(self):
-        today = date.today()
-        offset = 1
-
-        if today.weekday() == 5:  # Saturday
-            offset = 1
-        elif today.weekday() == 6:  # Sunday
-            offset = 2
-
-        return today - timedelta(days=offset)
+        return self._adjust_to_weekday(date.today() - timedelta(days=1))
 
 
     async def fetch(self, currencies: list[str], days: int = 150):
@@ -30,7 +29,7 @@ class FXProvider:
             raise ValueError("currencies must be list[str], got str. Did you forget .split(',')?")
         
         end_date = self.get_last_trading_day()
-        start_date = end_date - timedelta(days=days)
+        start_date = self._adjust_to_weekday(end_date - timedelta(days=days))
 
         all_data = {}
 
@@ -53,13 +52,17 @@ class FXProvider:
                 data = r.json()
 
                 if "price" not in data:
-                    print("Batch failed:", group, data)
+                    logger.error("Batch failed: %s %s", group, data)
                     continue
 
                 for day, values in data["price"].items():
                     all_data.setdefault(day, {})
                     all_data[day].update(values)
-                    
+
+        if not all_data:
+            logger.error("No FX data received from API")
+            raise RuntimeError("FX API returned no price data")
+
         set_cache({"price": all_data})
         logger.info("Loaded cache")                     
         return {"price": all_data}

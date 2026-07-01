@@ -38,7 +38,10 @@ async def resolve_fx_data(fx_provider, symbols, source: FxSource = "auto"):
         if cache:
             return cache, "cache"
 
-    data = await fx_provider.fetch(symbols)
+    try:
+        data = await fx_provider.fetch(symbols)
+    except RuntimeError as exc:
+        raise HTTPException(status_code=502, detail=str(exc)) from exc
     return data, "api"
 
 
