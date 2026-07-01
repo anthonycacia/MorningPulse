@@ -127,7 +127,7 @@ You can trigger the endpoint locally:
 ```
 curl -X POST http://localhost:8000/run/morning-pulse  
 ```
-Or open API docs: http://localhost:8000/docs  
+Or open API docs: http://localhost:8000/docs
 
 ## Example Docs
 
@@ -169,13 +169,32 @@ Safe to perform actions.
 
 Returns raw foreign exchange data.
 
+Optional query param `source`:
+
+- `auto` (default) — use on-disk cache if present, otherwise fetch from the API
+- `cache` — cache only; returns 404 if no cache file exists
+- `api` — always fetch live data (also writes/updates the cache)
+- `mock` — fixture data for offline testing (no API key required)
+
+Response includes `"source": "cache" | "api" | "mock"` indicating which path was used.
+
+### GET /debug/fx/mock
+
+Returns bundled fixture FX data for offline testing.
+
+### POST /debug/fx/refresh-cache
+
+Fetches live FX data from the API and writes it to the on-disk cache.
+
 ### GET /msg
 
-Builds a report without sending it to Discord.
+Builds a report without sending it to Discord. Accepts the same optional `source` query param as `/debug/fx` (`auto`, `cache`, `api`, `mock`).
+
+Response includes `"source": "cache" | "api" | "mock"` and `"message"` with the formatted report.
 
 ### POST /run/morning-pulse
 
-Builds and sends the report to Discord.
+Builds and sends the report to Discord. Always fetches live FX data from the API (never uses cache), so credentials are validated on every run. Returns an error if the FX API or Discord webhook call fails.
 
 ### Data Persistence
 
@@ -183,7 +202,7 @@ Market data is cached using a Docker volume:
 
 ./cache
 
-The cache survives container rebuilds and restarts.
+The cache survives container rebuilds and restarts. It is written automatically when live data is fetched (`source=api` or `source=auto` with no existing cache). Use `source=cache` on `/debug/fx` or `/msg` for offline preview once the cache is populated.
 
 # Roadmap
 - News Headlines and Summaries  

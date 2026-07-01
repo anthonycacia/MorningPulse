@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 
 CACHE_FILE = Path("/app/cache/fx_cache.json")
+MOCK_FILE = Path(__file__).resolve().parent.parent / "fixtures" / "fx_mock.json"
 
 
 def set_cache(data):
@@ -14,5 +15,5 @@ def get_cache():
     return json.loads(CACHE_FILE.read_text())
 
 
-def has_cache():
-    return CACHE_FILE.exists()
+def get_mock_fx_data():
+    return json.loads(MOCK_FILE.read_text())
